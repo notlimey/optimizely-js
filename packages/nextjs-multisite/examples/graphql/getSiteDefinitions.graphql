@@ -1,0 +1,27 @@
+query SiteStructure {
+	SiteDefinition {
+		items {
+			Id
+			Name
+			Status
+			ContentLink {
+				Id
+			}
+			Languages {
+				IsMasterLanguage
+				DisplayName
+				Name
+				UrlSegment
+				Url
+			}
+			Hosts {
+				Name
+				Language {
+					Link
+					DisplayName
+					Name
+				}
+			}
+		}
+	}
+}
