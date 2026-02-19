@@ -1,24 +1,21 @@
 import { type NextRequest, NextResponse } from "next/server";
-import type { ConfigureMultisiteContext } from "./configure";
-import { MultisiteError } from "./error";
-import { resolveHeaders } from "./headers";
-import { type InitialMultisiteHeaders, MultisiteHeader } from "./headers/types";
-import { SiteDefinitionsHelper } from "./siteDefinitions/match";
-import type { Host, SiteDefinition } from "./siteDefinitions/types";
-import { MultisiteContextStep } from "./types";
+import { MultisiteError } from "~/error";
+import { resolveHeaders } from "~/headers";
+import type { Host, SiteDefinition } from "~/siteDefinitions/types";
+import {
+	type InitialMultisiteHeaders,
+	MultisiteContextStep,
+	MultisiteHeader,
+	SiteDefinitionsHelper,
+} from "~/types";
 
-export default class MultisiteContext<
+export default class SiteConfiguration<
 	H extends string = InitialMultisiteHeaders,
 > {
-	private get ctx(): ConfigureMultisiteContext | null {
-		return globalThis?.__OPTIMIZELY_MULTISITE_CONTEXT__;
-	}
+	private err = (message: string) =>
+		new MultisiteError(message, MultisiteContextStep.RESOLVE_SITE_PROPS);
 
-	private err(message: string) {
-		return new MultisiteError(message, MultisiteContextStep.RESOLVE_SITE_PROPS);
-	}
-
-	public async resolveSiteProps(): Promise<Record<H, string>> {
+	public async details(): Promise<Record<H, string>> {
 		const siteDefinitions = await this.getSiteDefinitions();
 
 		if (siteDefinitions.length === 0)
@@ -27,9 +24,9 @@ export default class MultisiteContext<
 		return (await resolveHeaders<H>()) as Record<H, string>;
 	}
 
-	public async proxy(request: NextRequest, init?: ResponseInit) {
+	public async handleProxy(request: NextRequest, init?: ResponseInit) {
 		const siteDefinitions = await this.getSiteDefinitions();
-		// find current host
+
 		const helper = new SiteDefinitionsHelper(siteDefinitions);
 		const requestHost =
 			request.nextUrl.host || request.headers.get("host") || "";
@@ -44,7 +41,7 @@ export default class MultisiteContext<
 		);
 
 		const headers = new Headers(request.headers);
-		// set variables for siteId, language, etc. based on host
+
 		headers.set(MultisiteHeader.SITE_ID, site.id || "");
 		headers.set(
 			MultisiteHeader.LANGUAGE,
@@ -67,12 +64,12 @@ export default class MultisiteContext<
 	}
 
 	private getSiteDefinitions = async (): Promise<SiteDefinition[]> => {
-		if (!this.ctx) {
+		if (!globalThis?.__OPTIMIZELY_MULTISITE_CONTEXT__) {
 			throw this.err(
 				"Multisite context is not configured. Please call configureMultisite first.",
 			);
 		}
-		const result = await this.ctx.get();
+		const result = await globalThis?.__OPTIMIZELY_MULTISITE_CONTEXT__.get();
 
 		if (!result || !Array.isArray(result)) {
 			throw this.err("Site definitions must be an array");

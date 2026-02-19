@@ -1,27 +1,29 @@
 {
   "name": "@notlimey/optimizely-nextjs-multisite",
-  "version": "0.0.1-alpha.1",
+  "version": "0.0.1-alpha.8",
   "description": "A next.js package to support optimizely multisite",
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "build": "rm -rf dist && tsup src/index.ts --format cjs,esm --dts && esbuild dist/**/*.js --minify --outdir=dist/min",
     "dev": "tsup src/index.ts --format cjs,esm --dts --watch"
   },
+  "files": [
+    "dist/min/*",
+    "dist/index.d.ts"
+  ],
   "exports": {
     ".": {
-      "import": "./dist/index.js",
+      "import": "./dist/min/index.js",
       "types": "./dist/index.d.ts"
-    },
-    "./debug/*": {
-      "import": "./dist/debug/*.js",
-      "types": "./dist/debug/*.d.ts"
     }
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "esbuild": "^0.27.3",
+    "tsup": "^8.5.1",
     "typescript": "^5.9.3"
   },
   "peerDependencies": {

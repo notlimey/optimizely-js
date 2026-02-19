@@ -1,9 +1,9 @@
-import type { ConfigureMultisiteContext } from "./configure";
+import type { SiteConfigurationContext } from "./configure";
 import { MultisiteError } from "./error";
 import { MultisiteContextStep } from "./types";
 
 declare global {
-	var __OPTIMIZELY_MULTISITE_CONTEXT__: ConfigureMultisiteContext | null;
+	var __OPTIMIZELY_MULTISITE_CONTEXT__: SiteConfigurationContext | null;
 }
 
 export const getGlobalMultisiteContext = () => {
@@ -17,7 +17,7 @@ export const getGlobalMultisiteContext = () => {
 	return ctx;
 };
 
-export const setGlobalMultisiteContext = (ctx: ConfigureMultisiteContext) => {
+export const setGlobalMultisiteContext = (ctx: SiteConfigurationContext) => {
 	if (!globalThis)
 		throw new MultisiteError(
 			"Global object is not available",
