@@ -1,0 +1,6 @@
+fragment SharedPageData on IContent {
+	Name
+	ContentLink {
+		GuidValue
+	}
+}

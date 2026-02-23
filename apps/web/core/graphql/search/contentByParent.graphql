@@ -1,0 +1,25 @@
+query GetContentByParent(
+	$parentId: String!
+	$siteId: String!
+	$language: String
+) {
+	Content(
+		where: {
+			_and: [
+				{ ParentLink: { GuidValue: { eq: $parentId } } }
+				{ SiteId: { eq: $siteId } }
+				{
+					_or: [
+						{ Language: { Name: { eq: $language } } }
+						{ Language: { Name: { eq: null } } }
+					]
+				}
+			]
+		}
+	) {
+		items {
+			...ContentMetadata
+			...WebPublicationArticlePageProperties
+		}
+	}
+}

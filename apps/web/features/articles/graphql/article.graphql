@@ -1,0 +1,29 @@
+fragment WebPublicationArticlePageProperties on WebPublicationArticlePage {
+	_id
+	Name
+	Title
+	Url
+	SiteId
+	Language {
+		DisplayName
+		Link
+		Name
+	}
+	MainBody {
+		Html
+		Structure
+		__typename
+	}
+	StartPublish
+	StopPublish
+	Preamble
+	ParentLink {
+		Id
+		WorkId
+		GuidValue
+		ProviderName
+		Url
+	}
+	RelativePath
+	Ancestors
+}

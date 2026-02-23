@@ -1,0 +1,29 @@
+fragment ContentMetadata on IContent {
+	__typename
+	_concreteType
+	Name
+	RouteSegment
+	RelativePath
+	ContentLink {
+		GuidValue
+	}
+	Language {
+		Link
+		Name
+	}
+	Url
+	SiteId
+	StartPublish
+}
+
+fragment SimpleContentMetadata on IContent {
+	_id
+	__typename
+	_concreteType
+	ContentType
+	Name
+	ContentLink {
+		GuidValue
+		__typename
+	}
+}

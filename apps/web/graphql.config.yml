@@ -1,0 +1,6 @@
+schema: __generated/graphql.schema.graphql
+documents: '**/*.graphql'
+extensions:
+  endpoints:
+    Main:
+      url: ${OPTIMIZELY_GRAPH_GATEWAY}/content/v2?auth=${OPTIMIZELY_GRAPH_SINGLE_KEY}

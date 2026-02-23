@@ -1,0 +1,22 @@
+query ContentByPath($siteId: String!, $path: String!, $language: String) {
+	Content(
+		where: {
+			_and: [
+				{ SiteId: { eq: $siteId } }
+				{ RelativePath: { eq: $path } }
+				{
+					_or: [
+						{ Language: { Name: { eq: $language } } }
+						{ Language: { Name: { eq: null } } }
+					]
+				}
+			]
+		}
+	) {
+		items {
+			Ancestors
+			...ContentMetadata
+			...WebPublicationArticlePageProperties
+		}
+	}
+}

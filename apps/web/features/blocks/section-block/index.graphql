@@ -1,0 +1,13 @@
+fragment SectionBlockData on SectionBlock {
+    Title
+    WithBackgroundColor
+    Url
+    SectionContent {
+        ContentLink {
+            GuidValue
+        }
+        __typename
+        Tag
+        DisplayOption
+    }
+}

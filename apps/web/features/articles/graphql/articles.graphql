@@ -1,0 +1,16 @@
+query Articles($limit: Int!, $siteId: String!, $language: String) {
+	WebPublicationArticlePage(
+		limit: $limit
+		where: {
+			SiteId: { eq: $siteId }
+			_or: [
+				{ Language: { Name: { eq: $language } } }
+				{ Language: { Name: { notEq: null } } }
+			]
+		}
+	) {
+		items {
+			...ContentMetadata
+		}
+	}
+}

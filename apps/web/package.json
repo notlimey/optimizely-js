@@ -8,21 +8,36 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint --max-warnings 0",
-    "check-types": "next typegen && tsc --noEmit"
+    "check-types": "next typegen && tsc --noEmit",
+    "generate": "graphql-codegen"
   },
   "dependencies": {
-    "@repo/ui": "workspace:*",
-    "next": "16.1.5",
+    "@notlimey/optimizely-nextjs-multisite": "workspace:*",
+    "graphql": "^16.12.0",
+    "graphql-request": "^7.4.0",
+    "graphql-tag": "^2.12.6",
+    "lucide-react": "^0.575.0",
+    "next": "16.1.6",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },
   "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
+    "@graphql-codegen/cli": "^6.1.1",
+    "@graphql-codegen/introspection": "^5.0.0",
+    "@graphql-codegen/schema-ast": "^5.0.0",
+    "@graphql-codegen/typescript": "^5.0.7",
+    "@graphql-codegen/typescript-generic-sdk": "^4.1.0",
+    "@graphql-codegen/typescript-graphql-request": "^6.4.0",
+    "@graphql-codegen/typescript-operations": "^5.0.7",
+    "@graphql-codegen/typescript-resolvers": "^5.1.5",
+    "@next/env": "^16.1.6",
+    "@tailwindcss/postcss": "^4.2.0",
     "@types/node": "^22.15.3",
     "@types/react": "19.2.2",
     "@types/react-dom": "19.2.2",
     "eslint": "^9.39.1",
+    "fast-glob": "^3.3.3",
+    "tailwindcss": "^4.2.0",
     "typescript": "5.9.2"
   }
 }

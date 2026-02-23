@@ -1,0 +1,10 @@
+query ContentById($ids: [String!]) {
+	Content(ids: $ids) {
+		items {
+			...ExtendedXhtmlBlockData
+			...SectionBlockData
+			...ExpandableXhtmlBlockData
+			...WebPublicationArticlePageProperties
+		}
+	}
+}

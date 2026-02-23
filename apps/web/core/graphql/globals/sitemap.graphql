@@ -1,0 +1,14 @@
+query Sitemap($siteId: String!, $cursor: String) {
+	Content(
+		where: { _and: [{ SiteId: { eq: $siteId } }] }
+		limit: 100
+		cursor: $cursor
+	) {
+		items {
+			_id
+			RelativePath
+		}
+		total
+		cursor
+	}
+}

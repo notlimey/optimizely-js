@@ -1,0 +1,8 @@
+fragment ExpandableXhtmlBlockData on ExpandableXhtmlBlock {
+    Content {
+        Html
+        Structure
+        __typename
+    }
+    Title
+}
