@@ -7,6 +7,7 @@ This repository uses [Turborepo](https://turbo.build/) and [pnpm](https://pnpm.i
 ## Packages
 
 ### [`@notlimey/optimizely-nextjs-multisite`](./packages/nextjs-multisite/README.md)
+
 A Next.js package designed to seamlessly integrate Optimizely CMS Multisite routing and context into your Next.js App Router applications.
 
 - **Location:** `packages/nextjs-multisite`
@@ -15,6 +16,7 @@ A Next.js package designed to seamlessly integrate Optimizely CMS Multisite rout
 ## Apps
 
 ### [`web`](./apps/web/README.md) (Example Project)
+
 An example Next.js App Router application demonstrating how to consume the `@notlimey/optimizely-nextjs-multisite` package.
 
 - **Location:** `apps/web`
@@ -45,4 +47,5 @@ From the root directory, you can use Turborepo to run commands across all worksp
 To run the `web` example locally, make sure to set up your `.env.local` inside `apps/web` with the necessary Optimizely Graph keys and your `OPTIMIZELY_MULTISITE_HEADER_SECRET` matching your multisite configuration.
 
 ## License
+
 ISC

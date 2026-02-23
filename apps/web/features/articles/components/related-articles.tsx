@@ -1,6 +1,6 @@
-'use client';
-import Link from 'next/link';
-import type { RelatedArticles as TRelatedArticles } from '../data/relatedArticles';
+"use client";
+import Link from "next/link";
+import type { RelatedArticles as TRelatedArticles } from "../data/relatedArticles";
 
 // For now this is not related just other articles on the same site
 export const RelatedArticles = ({
@@ -12,7 +12,7 @@ export const RelatedArticles = ({
 		{relatedArticles?.map((article) => (
 			<Link
 				key={article?.RelativePath}
-				href={article?.RelativePath ?? ''}
+				href={article?.RelativePath ?? ""}
 				className="block rounded-md border p-4 transition-colors hover:bg-secondary/50"
 			>
 				<h4 className="font-bold text-lg">{article?.Name}</h4>

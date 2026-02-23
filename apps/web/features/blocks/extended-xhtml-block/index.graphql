@@ -1,7 +1,7 @@
 fragment ExtendedXhtmlBlockData on ExtendedXhtmlBlock {
-    Content {
-        __typename
-        Html
-        Structure
-    }
+	Content {
+		__typename
+		Html
+		Structure
+	}
 }

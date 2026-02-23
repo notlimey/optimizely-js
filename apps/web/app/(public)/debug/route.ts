@@ -1,5 +1,5 @@
-import type { NextRequest } from 'next/server';
-import { siteConfiguration } from '~/core/siteConfiguration';
+import type { NextRequest } from "next/server";
+import { siteConfiguration } from "~/core/siteConfiguration";
 
 export const GET = async (request: NextRequest) => {
 	const siteProps = await siteConfiguration.details();
@@ -10,7 +10,7 @@ export const GET = async (request: NextRequest) => {
 		}),
 		{
 			headers: {
-				'Content-Type': 'application/json',
+				"Content-Type": "application/json",
 			},
 		},
 	);

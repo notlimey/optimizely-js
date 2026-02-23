@@ -12,6 +12,7 @@ This package securely resolves the correct site definition based on incoming req
 - **Strongly Typed**: Full TypeScript support for your site configuration and resolved context.
 
 ## Requirements
+
 - Node.js runtime (Edge runtime is **NOT** supported as the package relies on Node.js Crypto for signatures)
 - Next.js 16+
 - App Router (`app` directory)
@@ -41,16 +42,16 @@ import { createSiteConfiguration } from "@notlimey/optimizely-nextjs-multisite";
 import sdk from "./your-sdk";
 
 export const siteConfiguration = createSiteConfiguration({
-    security: {
-        // Essential: Keep this secret in your environment variables!
-        headerSignatureSecret: process.env.OPTIMIZELY_MULTISITE_HEADER_SECRET || "",
-    },
-    // The get method is called internally to fetch definitions
-    // I recommend adding caching here if your definitions don't change often.
-    get: async () => {
-        const res = await sdk.SiteStructure();
-        return (res.SiteDefinition?.items || []);
-    }
+  security: {
+    // Essential: Keep this secret in your environment variables!
+    headerSignatureSecret: process.env.OPTIMIZELY_MULTISITE_HEADER_SECRET || "",
+  },
+  // The get method is called internally to fetch definitions
+  // I recommend adding caching here if your definitions don't change often.
+  get: async () => {
+    const res = await sdk.SiteStructure();
+    return res.SiteDefinition?.items || [];
+  },
 });
 ```
 
@@ -64,20 +65,20 @@ import { NextResponse, type NextRequest } from "next/server";
 import { siteConfiguration } from "./multisite";
 
 export async function middleware(request: NextRequest) {
-    try {
-        // Automatically maps the request to an Optimizely site and proxies
-        // the modified request (with secure headers) to Next.js
-        return await siteConfiguration.handleProxy(request);
-    } catch (error) {
-        console.error("Multisite resolution failed", error);
-        // Fallback or error handling
-        return NextResponse.next();
-    }
+  try {
+    // Automatically maps the request to an Optimizely site and proxies
+    // the modified request (with secure headers) to Next.js
+    return await siteConfiguration.handleProxy(request);
+  } catch (error) {
+    console.error("Multisite resolution failed", error);
+    // Fallback or error handling
+    return NextResponse.next();
+  }
 }
 
 export const config = {
-    // Avoid running middleware on static files and Next.js internals
-    matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
+  // Avoid running middleware on static files and Next.js internals
+  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
 };
 ```
 
@@ -91,22 +92,23 @@ import { siteConfiguration } from "../../src/multisite";
 import sdk from "../../src/your-sdk";
 
 export default async function Page() {
-    // details() reads next/headers and validates the secure signature
-    const { siteId, relativePath, language, masterLanguage, currentHost } = await siteConfiguration.details();
-    
-    // Use the context to fetch the correct Optimizely content
-    const page = await sdk.getContentByPath({ 
-        siteId, 
-        relativePath,
-        language 
-    });
+  // details() reads next/headers and validates the secure signature
+  const { siteId, relativePath, language, masterLanguage, currentHost } =
+    await siteConfiguration.details();
 
-    return (
-        <main>
-            <h1>{page?.name}</h1>
-            {/* Render your page content */}
-        </main>
-    );
+  // Use the context to fetch the correct Optimizely content
+  const page = await sdk.getContentByPath({
+    siteId,
+    relativePath,
+    language,
+  });
+
+  return (
+    <main>
+      <h1>{page?.name}</h1>
+      {/* Render your page content */}
+    </main>
+  );
 }
 ```
 
@@ -120,15 +122,15 @@ import { siteConfiguration } from "../multisite";
 import sdk from "../your-sdk";
 
 export const getChildren = async (parentGuid: string) => {
-	const { siteId, language } = await siteConfiguration.details();
+  const { siteId, language } = await siteConfiguration.details();
 
-	const content = await sdk.GetContentByParent({
-		parentId: parentGuid,
-		siteId,
-		language,
-	});
+  const content = await sdk.GetContentByParent({
+    parentId: parentGuid,
+    siteId,
+    language,
+  });
 
-	return content?.Content?.items || [];
+  return content?.Content?.items || [];
 };
 ```
 
@@ -137,6 +139,7 @@ export const getChildren = async (parentGuid: string) => {
 When `handleProxy` is called in Middleware, the package resolves the correct site definition by comparing the incoming request's host against the hosts defined in your Optimizely site structure.
 
 The matching process follows a specific priority:
+
 1. **Exact Match:** It looks for a host definition that exactly matches the request host (including port), ignoring case.
 2. **Wildcard Port Match:** If no exact match is found, it checks for definitions containing a wildcard port (e.g., `example.com:*`). This matches if the hostnames match, regardless of the port.
 3. **Catch-all Match:** A host definition of exactly `*` acts as a catch-all and will match any incoming request.
@@ -149,6 +152,7 @@ If no matching host is found, `handleProxy` will throw an error.
 The `headerSignatureSecret` is critical. It ensures that the `x-opti-multisite-*` headers passed down from Middleware haven't been spoofed by an external request. Make sure `process.env.OPTIMIZELY_MULTISITE_HEADER_SECRET` is a long, random string, and is securely stored in your `.env.local` or hosting provider's secrets manager.
 
 ## Note
+
 Documentation is partially written with google gemini, can include incorrect information.
 
 ## License

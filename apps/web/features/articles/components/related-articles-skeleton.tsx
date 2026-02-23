@@ -1,5 +1,5 @@
 /** biome-ignore-all lint/suspicious/noArrayIndexKey: Using index as key is acceptable here as the list is static and not reordered. */
-'use client';
+"use client";
 
 // For now this is not related just other articles on the same site
 export const RelatedArticlesSkeleton = () => {

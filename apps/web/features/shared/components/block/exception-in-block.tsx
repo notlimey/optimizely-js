@@ -1,4 +1,4 @@
-import type { Maybe } from '~/__generated/graphql.sdk';
+import type { Maybe } from "~/__generated/graphql.sdk";
 
 type Props = {
 	type: string;

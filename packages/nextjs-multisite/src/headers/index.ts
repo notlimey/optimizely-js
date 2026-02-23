@@ -2,10 +2,7 @@ import type { ReadonlyHeaders } from "next/dist/server/web/spec-extension/adapte
 import { headers as nextHeaders } from "next/headers";
 import { MultisiteContextStep, MultisiteError } from "~/types";
 import { type InitialMultisiteHeaders, MultisiteHeader } from "./types";
-import {
-	createSignaturePayload,
-	verifyMultisiteSignature,
-} from "./signature";
+import { createSignaturePayload, verifyMultisiteSignature } from "./signature";
 
 export type HeaderSchema = Record<
 	InitialMultisiteHeaders,
@@ -53,9 +50,7 @@ export const resolveHeaders = async <
 			MultisiteContextStep.HEADERS,
 		);
 
-	const middlewareApplied = headers.get(
-		MultisiteHeader.MIDDLEWARE_APPLIED,
-	);
+	const middlewareApplied = headers.get(MultisiteHeader.MIDDLEWARE_APPLIED);
 	if (middlewareApplied !== "1")
 		throw new MultisiteError(
 			"Multisite middleware header marker is missing",

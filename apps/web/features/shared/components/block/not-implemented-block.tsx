@@ -1,7 +1,7 @@
-'use client';
-import { InfoIcon } from 'lucide-react';
-import { useState } from 'react';
-import type { Maybe } from '~/__generated/graphql.sdk';
+"use client";
+import { InfoIcon } from "lucide-react";
+import { useState } from "react";
+import type { Maybe } from "~/__generated/graphql.sdk";
 
 type Props = {
 	type: string;
@@ -27,9 +27,7 @@ export const NotImplementedBlockType = ({ type, name, content }: Props) => {
 			</div>
 			{isExpanded && (
 				<div className="mx-auto my-6 max-w-182 rounded-lg border bg-gray-50 px-5 py-4 text-gray-500 text-sm">
-					<pre>
-						{JSON.stringify({ type, name, content }, null, 2)}
-					</pre>
+					<pre>{JSON.stringify({ type, name, content }, null, 2)}</pre>
 				</div>
 			)}
 		</>
