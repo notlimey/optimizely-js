@@ -6,5 +6,7 @@ export default function ArticlePage({
 }: {
 	content: ContentByPathWithType<"WebPublicationArticlePage">;
 }) {
+	// logic here
+
 	return <ArticleStandardView content={content} />;
 }

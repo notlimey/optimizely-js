@@ -1,5 +1,6 @@
 import { cache } from "react";
 import { sdk } from "~/core/graphql/sdk";
+import { siteConfiguration } from "~/core/siteConfiguration";
 
 async function fetchContentByPath(path: string, siteId: string) {
 	const content = await sdk.ContentByPath({
@@ -13,7 +14,8 @@ export type ContentByPathResult = Awaited<
 	ReturnType<typeof fetchContentByPath>
 >;
 
-export const getContentByPath = async (path: string, siteId: string) => {
+export const getContentByPath = async () => {
+	const { relativePath: path, siteId } = await siteConfiguration.details();
 	const content = await cache(() => fetchContentByPath(path, siteId))();
 
 	return content;

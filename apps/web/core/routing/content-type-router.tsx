@@ -8,19 +8,13 @@ import { siteConfiguration } from "../siteConfiguration";
 import { pageComponents } from "./pages";
 
 export default async function RenderPage() {
-	const { relativePath, siteId } = await siteConfiguration.details();
-	// Temp hack for start page until we have an indexed start page in the graph index
+	const { relativePath } = await siteConfiguration.details();
 	// TODO: Startpage is indexed now so you can remove this and create a content type for start page
-	if (relativePath === "/") {
-		return <StartPage />;
-	}
+	if (relativePath === "/") return <StartPage />;
 
-	const content = await getContentByPath(relativePath, siteId);
+	const content = await getContentByPath();
 
-	console.log(content);
-
-	if (!content || !("__typename" in content) || !("_concreteType" in content))
-		return notFound();
+	if (!content) return notFound();
 
 	const type =
 		(content._concreteType as ContentByPathTypename) || content.__typename;
