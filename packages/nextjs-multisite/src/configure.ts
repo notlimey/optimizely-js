@@ -22,6 +22,12 @@ export const createSiteConfiguration = <
 			MultisiteContextStep.CONFIGURATION,
 		);
 	}
+	if (!options.security?.headerSignatureSecret?.trim()) {
+		throw new MultisiteError(
+			"A non-empty security.headerSignatureSecret is required",
+			MultisiteContextStep.CONFIGURATION,
+		);
+	}
 
 	const ctx: SiteConfigurationContext = {
 		...options,

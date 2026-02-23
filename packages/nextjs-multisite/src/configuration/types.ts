@@ -20,8 +20,13 @@ export type HostMatchingFunction =
 	| DefaultHostMatchingFunction
 	| FindBestHostMatchingFunction;
 
+export type MultisiteSecurityOptions = {
+	headerSignatureSecret: string;
+};
+
 export type ConfigureMultisiteOptions = {
 	get: GetSiteDefinitionsFunction;
+	security: MultisiteSecurityOptions;
 	host?: {
 		match?: HostMatchingFunction;
 	};

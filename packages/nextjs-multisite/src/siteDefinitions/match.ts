@@ -1,3 +1,4 @@
+import { MultisiteContextStep, MultisiteError } from "~/types";
 import type { Host, SiteDefinition } from "./types";
 
 export interface HostWithSite {
@@ -39,8 +40,9 @@ export class SiteDefinitionsHelper {
 		const allHostNames = matches.map((match) => match.host.name).join(", ");
 
 		if (matches.length === 0) {
-			throw new Error(
+			throw new MultisiteError(
 				`No matching host found for the request host.${allHostNames} - ${requestHost} - ${this.results?.length}`,
+				MultisiteContextStep.FETCH_SITE_DEFINITIONS,
 			);
 		}
 

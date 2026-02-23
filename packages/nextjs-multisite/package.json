@@ -1,21 +1,28 @@
 {
   "name": "@notlimey/optimizely-nextjs-multisite",
-  "version": "0.0.1-alpha.8",
+  "version": "0.0.3-alpha.0",
   "description": "A next.js package to support optimizely multisite",
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "rm -rf dist && tsup src/index.ts --format cjs,esm --dts && esbuild dist/**/*.js --minify --outdir=dist/min",
+    "build": "rm -rf dist && tsup src/index.ts --format cjs,esm --dts && esbuild dist/**/*.js --minify --outdir=dist/min && esbuild dist/**/*.cjs --minify --outdir=dist/min --out-extension:.js=.cjs",
     "dev": "tsup src/index.ts --format cjs,esm --dts --watch"
   },
   "files": [
     "dist/min/*",
-    "dist/index.d.ts"
+    "dist/index.d.ts",
+    "dist/index.d.cts"
   ],
   "exports": {
     ".": {
-      "import": "./dist/min/index.js",
-      "types": "./dist/index.d.ts"
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/min/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/min/index.cjs"
+      }
     }
   },
   "keywords": [],
@@ -28,8 +35,5 @@
   },
   "peerDependencies": {
     "next": "16"
-  },
-  "dependencies": {
-    "zod": "^4.3.6"
   }
 }

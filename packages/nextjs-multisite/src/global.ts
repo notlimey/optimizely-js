@@ -23,6 +23,6 @@ export const setGlobalMultisiteContext = (ctx: SiteConfigurationContext) => {
 			"Global object is not available",
 			MultisiteContextStep.CONFIGURATION,
 		);
-	global.__OPTIMIZELY_MULTISITE_CONTEXT__ = ctx;
+	globalThis.__OPTIMIZELY_MULTISITE_CONTEXT__ = ctx;
 	return ctx;
 };

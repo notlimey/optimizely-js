@@ -1,6 +1,11 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { MultisiteError } from "~/error";
+import { getGlobalMultisiteContext } from "~/global";
 import { resolveHeaders } from "~/headers";
+import {
+	createMultisiteSignature,
+	createSignaturePayload,
+} from "~/headers/signature";
 import type { Host, SiteDefinition } from "~/siteDefinitions/types";
 import {
 	type InitialMultisiteHeaders,
@@ -15,13 +20,20 @@ export default class SiteConfiguration<
 	private err = (message: string) =>
 		new MultisiteError(message, MultisiteContextStep.RESOLVE_SITE_PROPS);
 
+	private cachedSiteDefinitions: SiteDefinition[] | null = null;
+	private cacheTimestamp: number = 0;
+	private cacheTTL: number = 60 * 1000;
+
 	public async details(): Promise<Record<H, string>> {
 		const siteDefinitions = await this.getSiteDefinitions();
 
 		if (siteDefinitions.length === 0)
 			throw this.err("No site definitions available");
 
-		return (await resolveHeaders<H>()) as Record<H, string>;
+		const multisiteContext = getGlobalMultisiteContext();
+		return (await resolveHeaders<H>(undefined, {
+			signatureSecret: multisiteContext.security.headerSignatureSecret,
+		})) as Record<H, string>;
 	}
 
 	public async handleProxy(request: NextRequest, init?: ResponseInit) {
@@ -41,16 +53,40 @@ export default class SiteConfiguration<
 		);
 
 		const headers = new Headers(request.headers);
+		const siteId = site.id || "";
+		const language = host.language?.name || masterLanguage?.name || "";
+		const relativePath = request.nextUrl.pathname;
+		const currentHost = host.name || "";
+		const requestHostHeader = request.headers.get("host") || "";
+		const multisiteContext = getGlobalMultisiteContext();
 
-		headers.set(MultisiteHeader.SITE_ID, site.id || "");
-		headers.set(
-			MultisiteHeader.LANGUAGE,
-			host.language?.name || masterLanguage?.name || "",
-		);
-		headers.set(MultisiteHeader.RELATIVE_PATH, request.nextUrl.pathname);
-		headers.set(MultisiteHeader.CURRENT_HOST, host.name || "");
+		for (const headerName of Object.values(MultisiteHeader)) {
+			headers.delete(headerName);
+		}
+
+		const signaturePayload = createSignaturePayload({
+			values: {
+				siteId,
+				language,
+				relativePath,
+				currentHost,
+				masterLanguage: masterLanguage?.name,
+			},
+			requestHost: requestHostHeader,
+		});
+		const signature = await createMultisiteSignature({
+			secret: multisiteContext.security.headerSignatureSecret,
+			payload: signaturePayload,
+		});
+
+		headers.set(MultisiteHeader.SITE_ID, siteId);
+		headers.set(MultisiteHeader.LANGUAGE, language);
+		headers.set(MultisiteHeader.RELATIVE_PATH, relativePath);
+		headers.set(MultisiteHeader.CURRENT_HOST, currentHost);
 		if (masterLanguage)
 			headers.set(MultisiteHeader.MASTER_LANGUAGE, masterLanguage.name);
+		headers.set(MultisiteHeader.MIDDLEWARE_APPLIED, "1");
+		headers.set(MultisiteHeader.SIGNATURE, signature);
 
 		const response = NextResponse.next({
 			...init,
@@ -64,6 +100,13 @@ export default class SiteConfiguration<
 	}
 
 	private getSiteDefinitions = async (): Promise<SiteDefinition[]> => {
+		if (
+			this.cachedSiteDefinitions &&
+			Date.now() - this.cacheTimestamp < this.cacheTTL
+		) {
+			return this.cachedSiteDefinitions;
+		}
+
 		if (!globalThis?.__OPTIMIZELY_MULTISITE_CONTEXT__) {
 			throw this.err(
 				"Multisite context is not configured. Please call configureMultisite first.",
@@ -111,6 +154,9 @@ export default class SiteConfiguration<
 		if (validSiteDefinitions.length === 0) {
 			throw this.err("No valid site definitions found");
 		}
+
+		this.cachedSiteDefinitions = validSiteDefinitions;
+		this.cacheTimestamp = Date.now();
 
 		return validSiteDefinitions;
 	};

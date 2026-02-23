@@ -133,9 +133,6 @@ importers:
       next:
         specifier: '16'
         version: 16.1.6(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(sass@1.97.3)
-      zod:
-        specifier: ^4.3.6
-        version: 4.3.6
     devDependencies:
       esbuild:
         specifier: ^0.27.3
@@ -2136,9 +2133,6 @@ packages:
   yocto-queue@0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
-
-  zod@4.3.6:
-    resolution: {integrity: sha512-rftlrkhHZOcjDwkGlnUtZZkvaPHCsDATp4pGpuOOMDaTdDDXF91wuVDJoWoPsKX/3YPQ5fHuF3STjcYyKr+Qhg==}
 
 snapshots:
 
@@ -4193,5 +4187,3 @@ snapshots:
     optional: true
 
   yocto-queue@0.1.0: {}
-
-  zod@4.3.6: {}
