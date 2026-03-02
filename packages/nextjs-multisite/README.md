@@ -36,18 +36,15 @@ First, create a centralized file to initialize your site configuration. This con
 > The graphql example used in `sdk.getSiteDefinitions` can be found here: [getSiteDefinitions.graphql](./examples/graphql/getSiteDefinitions.graphql)
 
 ```ts
-// src/multisite.ts (or wherever you keep your utilities)
 import { createSiteConfiguration } from "@notlimey/optimizely-nextjs-multisite";
 // Import your generated GraphQL SDK or fetcher here
 import sdk from "./your-sdk";
 
 export const siteConfiguration = createSiteConfiguration({
   security: {
-    // Essential: Keep this secret in your environment variables!
     headerSignatureSecret: process.env.OPTIMIZELY_MULTISITE_HEADER_SECRET || "",
   },
-  // The get method is called internally to fetch definitions
-  // I recommend adding caching here if your definitions don't change often.
+  // I recommend adding caching here if your definitions don't change often. (which i hope they don't)
   get: async () => {
     const res = await sdk.SiteStructure();
     return res.SiteDefinition?.items || [];
@@ -60,7 +57,7 @@ export const siteConfiguration = createSiteConfiguration({
 In your Next.js Middleware, use `handleProxy` to process incoming requests. This will match the request host, determine the proper site and language, and attach securely signed HTTP headers forwarding this context down.
 
 ```ts
-// src/middleware.ts
+// src/proxy.ts
 import { NextResponse, type NextRequest } from "next/server";
 import { siteConfiguration } from "./multisite";
 
