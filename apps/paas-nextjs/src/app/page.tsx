@@ -1,66 +1,217 @@
-import Image from "next/image";
+import { type Metadata } from 'next'
+import Image from 'next/image'
+import Link from 'next/link'
 
-export default function Home() {
-	return (
-		<div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-			<main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-				<Image
-					className="dark:invert"
-					src="/next.svg"
-					alt="Next.js logo"
-					width={100}
-					height={20}
-					priority
-				/>
-				<div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-					<h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-						To get started, edit the page.tsx file.
-					</h1>
-					<p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-						Looking for a starting point or more instructions? Head
-						over to{" "}
-						<a
-							href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-							className="font-medium text-zinc-950 dark:text-zinc-50"
-						>
-							Templates
-						</a>{" "}
-						or the{" "}
-						<a
-							href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-							className="font-medium text-zinc-950 dark:text-zinc-50"
-						>
-							Learning
-						</a>{" "}
-						center.
-					</p>
-				</div>
-				<div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-					<a
-						className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-						href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						<Image
-							className="dark:invert"
-							src="/vercel.svg"
-							alt="Vercel logomark"
-							width={16}
-							height={16}
-						/>
-						Deploy Now
-					</a>
-					<a
-						className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-						href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						Documentation
-					</a>
-				</div>
-			</main>
-		</div>
-	);
+import { ContactSection } from '@/components/ContactSection'
+import { Container } from '@/components/Container'
+import { FadeIn, FadeInStagger } from '@/components/FadeIn'
+import { List, ListItem } from '@/components/List'
+import { SectionIntro } from '@/components/SectionIntro'
+import { StylizedImage } from '@/components/StylizedImage'
+import { Testimonial } from '@/components/Testimonial'
+import logoBrightPath from '@/images/clients/bright-path/logo-light.svg'
+import logoFamilyFund from '@/images/clients/family-fund/logo-light.svg'
+import logoGreenLife from '@/images/clients/green-life/logo-light.svg'
+import logoHomeWork from '@/images/clients/home-work/logo-light.svg'
+import logoMailSmirk from '@/images/clients/mail-smirk/logo-light.svg'
+import logoNorthAdventures from '@/images/clients/north-adventures/logo-light.svg'
+import logoPhobiaDark from '@/images/clients/phobia/logo-dark.svg'
+import logoPhobiaLight from '@/images/clients/phobia/logo-light.svg'
+import logoUnseal from '@/images/clients/unseal/logo-light.svg'
+import imageLaptop from '@/images/laptop.jpg'
+import { type CaseStudy, type MDXEntry, loadCaseStudies } from '@/lib/mdx'
+import { RootLayout } from '@/components/RootLayout'
+
+const clients = [
+  ['Phobia', logoPhobiaLight],
+  ['Family Fund', logoFamilyFund],
+  ['Unseal', logoUnseal],
+  ['Mail Smirk', logoMailSmirk],
+  ['Home Work', logoHomeWork],
+  ['Green Life', logoGreenLife],
+  ['Bright Path', logoBrightPath],
+  ['North Adventures', logoNorthAdventures],
+]
+
+function Clients() {
+  return (
+    <div className="mt-24 rounded-4xl bg-neutral-950 py-20 sm:mt-32 sm:py-32 lg:mt-56">
+      <Container>
+        <FadeIn className="flex items-center gap-x-8">
+          <h2 className="text-center font-display text-sm font-semibold tracking-wider text-white sm:text-left">
+            We’ve worked with hundreds of amazing people
+          </h2>
+          <div className="h-px flex-auto bg-neutral-800" />
+        </FadeIn>
+        <FadeInStagger faster>
+          <ul
+            role="list"
+            className="mt-10 grid grid-cols-2 gap-x-8 gap-y-10 lg:grid-cols-4"
+          >
+            {clients.map(([client, logo]) => (
+              <li key={client}>
+                <FadeIn>
+                  <Image src={logo} alt={client} unoptimized />
+                </FadeIn>
+              </li>
+            ))}
+          </ul>
+        </FadeInStagger>
+      </Container>
+    </div>
+  )
+}
+
+function CaseStudies({
+  caseStudies,
+}: {
+  caseStudies: Array<MDXEntry<CaseStudy>>
+}) {
+  return (
+    <>
+      <SectionIntro
+        title="Harnessing technology for a brighter future"
+        className="mt-24 sm:mt-32 lg:mt-40"
+      >
+        <p>
+          We believe technology is the answer to the world’s greatest
+          challenges. It’s also the cause, so we find ourselves in bit of a
+          catch 22 situation.
+        </p>
+      </SectionIntro>
+      <Container className="mt-16">
+        <FadeInStagger className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+          {caseStudies.map((caseStudy) => (
+            <FadeIn key={caseStudy.href} className="flex">
+              <article className="relative flex w-full flex-col rounded-3xl p-6 ring-1 ring-neutral-950/5 transition hover:bg-neutral-50 sm:p-8">
+                <h3>
+                  <Link href={caseStudy.href}>
+                    <span className="absolute inset-0 rounded-3xl" />
+                    <Image
+                      src={caseStudy.logo}
+                      alt={caseStudy.client}
+                      className="h-16 w-16"
+                      unoptimized
+                    />
+                  </Link>
+                </h3>
+                <p className="mt-6 flex gap-x-2 text-sm text-neutral-950">
+                  <time
+                    dateTime={caseStudy.date.split('-')[0]}
+                    className="font-semibold"
+                  >
+                    {caseStudy.date.split('-')[0]}
+                  </time>
+                  <span className="text-neutral-300" aria-hidden="true">
+                    /
+                  </span>
+                  <span>Case study</span>
+                </p>
+                <p className="mt-6 font-display text-2xl font-semibold text-neutral-950">
+                  {caseStudy.title}
+                </p>
+                <p className="mt-4 text-base text-neutral-600">
+                  {caseStudy.description}
+                </p>
+              </article>
+            </FadeIn>
+          ))}
+        </FadeInStagger>
+      </Container>
+    </>
+  )
+}
+
+function Services() {
+  return (
+    <>
+      <SectionIntro
+        eyebrow="Services"
+        title="We help you identify, explore and respond to new opportunities."
+        className="mt-24 sm:mt-32 lg:mt-40"
+      >
+        <p>
+          As long as those opportunities involve giving us money to re-purpose
+          old projects — we can come up with an endless number of those.
+        </p>
+      </SectionIntro>
+      <Container className="mt-16">
+        <div className="lg:flex lg:items-center lg:justify-end">
+          <div className="flex justify-center lg:w-1/2 lg:justify-end lg:pr-12">
+            <FadeIn className="w-135 flex-none lg:w-180">
+              <StylizedImage
+                src={imageLaptop}
+                sizes="(min-width: 1024px) 41rem, 31rem"
+                className="justify-center lg:justify-end"
+              />
+            </FadeIn>
+          </div>
+          <List className="mt-16 lg:mt-0 lg:w-1/2 lg:min-w-132 lg:pl-4">
+            <ListItem title="Web development">
+              We specialise in crafting beautiful, high quality marketing pages.
+              The rest of the website will be a shell that uses lorem ipsum
+              everywhere.
+            </ListItem>
+            <ListItem title="Application development">
+              We have a team of skilled developers who are experts in the latest
+              app frameworks, like Angular 1 and Google Web Toolkit.
+            </ListItem>
+            <ListItem title="E-commerce">
+              We are at the forefront of modern e-commerce development. Which
+              mainly means adding your logo to the Shopify store template we’ve
+              used for the past six years.
+            </ListItem>
+            <ListItem title="Custom content management">
+              At Studio we understand the importance of having a robust and
+              customised CMS. That’s why we run all of our client projects out
+              of a single, enormous Joomla instance.
+            </ListItem>
+          </List>
+        </div>
+      </Container>
+    </>
+  )
+}
+
+export const metadata: Metadata = {
+  description:
+    'We are a development studio working at the intersection of design and technology.',
+}
+
+export default async function Home() {
+  let caseStudies = (await loadCaseStudies()).slice(0, 3)
+
+  return (
+    <RootLayout>
+      <Container className="mt-24 sm:mt-32 md:mt-56">
+        <FadeIn className="max-w-3xl">
+          <h1 className="font-display text-5xl font-medium tracking-tight text-balance text-neutral-950 sm:text-7xl">
+            Award-winning development studio based in Denmark.
+          </h1>
+          <p className="mt-6 text-xl text-neutral-600">
+            We are a development studio working at the intersection of design
+            and technology. It’s a really busy intersection though — a lot of
+            our staff have been involved in hit and runs.
+          </p>
+        </FadeIn>
+      </Container>
+
+      <Clients />
+
+      <CaseStudies caseStudies={caseStudies} />
+
+      <Testimonial
+        className="mt-24 sm:mt-32 lg:mt-40"
+        client={{ name: 'Phobia', logo: logoPhobiaDark }}
+      >
+        The team at Studio went above and beyond with our onboarding, even
+        finding a way to access the user’s microphone without triggering one of
+        those annoying permission dialogs.
+      </Testimonial>
+
+      <Services />
+
+      <ContactSection />
+    </RootLayout>
+  )
 }
